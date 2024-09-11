@@ -245,6 +245,17 @@ pub fn bootstrap_scratch<Scalar>(
     )
 }
 
+pub fn blind_rotate_assign_scratch<Scalar>(
+    glwe_size: GlweSize,
+    polynomial_size: PolynomialSize,
+    fft: FftView<'_>,
+) -> Result<StackReq, SizeOverflow> {
+    StackReq::try_all_of([
+        StackReq::try_new_aligned::<Scalar>(polynomial_size.0 * glwe_size.0, CACHELINE_ALIGN)?,
+        cmux_scratch::<Scalar>(glwe_size, polynomial_size, fft)?,
+    ])
+}
+
 impl<'a> FourierLweBootstrapKeyView<'a> {
     // CastInto required for PBS modulus switch which returns a usize
     pub fn blind_rotate_assign<InputScalar, OutputScalar>(
