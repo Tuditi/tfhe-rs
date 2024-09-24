@@ -52,6 +52,7 @@ fn main() {
         println!("cargo:rustc-link-search=native=/usr/lib/x86_64-linux-gnu/");
         println!("cargo:rustc-link-lib=stdc++");
         println!("cargo:rustc-link-lib=nvToolsExt");
+        println!("cargo:rustc-env=CUDA_MODULE_LOADING=EAGER");
     } else {
         panic!(
             "Error: platform not supported, tfhe-cuda-backend not built (only Linux is supported)"

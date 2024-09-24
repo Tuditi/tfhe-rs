@@ -84,7 +84,7 @@ endif()
 set(CMAKE_CUDA_FLAGS
     "${CMAKE_CUDA_FLAGS} -ccbin ${CMAKE_CXX_COMPILER} ${OPTIMIZATION_FLAGS}\
   -std=c++17 --no-exceptions  --expt-relaxed-constexpr -rdc=true \
-  --use_fast_math -Xcompiler -fPIC -lnvToolsExt")
+  --use_fast_math -Xcompiler -fPIC")
 
 set(INCLUDE_DIR include)
 
@@ -107,3 +107,42 @@ if(CPPLINT)
   set_target_properties(all_lint PROPERTIES EXCLUDE_FROM_ALL TRUE)
   # set_target_properties(all_lint PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD TRUE)
 endif()
+# Add the environment variable to .bashrc
+#set(ENV_VAR_NAME "CUDA_MODULE_LOADING")
+#set(ENV_VAR_VALUE "EAGER")
+#set(ENV{ENV_VAR_NAME} ENV_VAR_VALUE)
+#set(HOME_DIR $ENV{HOME})
+#set(EXPORT_COMMAND "export ${ENV_VAR_NAME}=${ENV_VAR_VALUE}\n")
+#file(APPEND "${HOME_DIR}/.bashrc" "${EXPORT_COMMAND}")
+
+# Set the environment variable name and new value
+#set(ENV_VAR_NAME "CUDA_MODULE_LOADING")
+#set(NEW_VALUE "EAGER")
+
+# Define the shell command to check and update the variable
+#set(CHECK_AND_UPDATE_COMMAND "
+#if grep -q 'export ${ENV_VAR_NAME}=' ~/.bashrc; then
+#  sed -i 's|export ${ENV_VAR_NAME}=.*|export ${ENV_VAR_NAME}=${NEW_VALUE}|' ~/.bashrc
+#else
+#  echo 'export ${ENV_VAR_NAME}=${NEW_VALUE}' >> ~/.bashrc
+#fi
+#")
+#
+## Execute the shell command
+##execute_process(
+##    COMMAND ${CMAKE_COMMAND} -E sh -c "${CHECK_AND_UPDATE_COMMAND}"
+##)
+#
+## Execute the shell command
+#execute_process(
+#    COMMAND /bin/sh -c "${CHECK_AND_UPDATE_COMMAND}"
+#)
+
+# Define the export module loading
+#set(ENV{CUDA_MODULE_LOADING} "EAGER")
+#set(EXPORT_MODULE_LOADING "
+#export ${ENV_VAR_NAME}=${NEW_VALUE}")
+
+# Export in current terminal
+#execute_process(
+#	COMMAND source ~/.bashrc)

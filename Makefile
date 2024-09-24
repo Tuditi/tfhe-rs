@@ -28,7 +28,7 @@ TFHE_SPEC:=tfhe
 # This is done to avoid forgetting it, we still precise the RUSTFLAGS in the commands to be able to
 # copy paste the command in the terminal and change them if required without forgetting the flags
 export RUSTFLAGS?=-C target-cpu=native
-
+export CUDA_MODULE_LOADING=EAGER
 ifeq ($(AVX512_SUPPORT),ON)
 		AVX512_FEATURE=nightly-avx512
 else
