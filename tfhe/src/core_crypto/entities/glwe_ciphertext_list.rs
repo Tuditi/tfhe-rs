@@ -187,18 +187,6 @@ impl<Scalar: UnsignedInteger, C: Container<Element = Scalar>> GlweCiphertextList
             ciphertext_modulus: self.ciphertext_modulus,
         }
     }
-
-    /// Return an iterator over the LWE ciphertexts.
-    pub fn into_ciphertexts(self) -> impl DoubleEndedIterator<Item = GlweCiphertext<C>>
-    where
-        C: Split,
-    {
-        let ciphertext_modulus = self.ciphertext_modulus();
-        let count = self.glwe_ciphertext_count().0;
-        self.data.split_into(count).map(move |slice| {
-            GlweCiphertext::from_container(slice, self.polynomial_size, ciphertext_modulus)
-        })
-    }
 }
 
 /// A [`GlweCiphertextList`] owning the memory for its own storage.
