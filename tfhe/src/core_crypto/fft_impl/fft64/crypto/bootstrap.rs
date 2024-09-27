@@ -426,19 +426,22 @@ impl<'a> FourierLweBootstrapKeyView<'a> {
     // CastInto required for PBS modulus switch which returns a usize
     pub fn batch_blind_rotate_assign<InputScalar, OutputScalar>(
         self,
-        mut lut: GlweCiphertextListMutView<'_, OutputScalar>,
-        lwe: LweCiphertextListView<'_, InputScalar>,
+        mut lut_list: GlweCiphertextListMutView<'_, OutputScalar>,
+        lwe_list: LweCiphertextListView<'_, InputScalar>,
         fft: FftView<'_>,
         mut stack: PodStack<'_>,
     ) where
         InputScalar: UnsignedTorus + CastInto<usize>,
         OutputScalar: UnsignedTorus,
     {
-        let lut_poly_size = lut.polynomial_size();
-        let ciphertext_modulus = lut.ciphertext_modulus();
+        let lut_poly_size = lut_list.polynomial_size();
+        let ciphertext_modulus = lut_list.ciphertext_modulus();
         assert!(ciphertext_modulus.is_compatible_with_native_modulus());
 
-        for (mut lut, lwe) in izip!(lut.as_mut_view().into_ciphertexts(), lwe.into_ciphertexts()) {
+        for (mut lut, lwe) in izip!(
+            lut_list.as_mut_view().into_ciphertexts(),
+            lwe_list.into_ciphertexts()
+        ) {
             let lwe = lwe.as_ref();
             let lwe_body = *lwe.last().unwrap();
 
@@ -458,20 +461,21 @@ impl<'a> FourierLweBootstrapKeyView<'a> {
         }
 
         // We initialize the ct_0 used for the successive cmuxes
-        let mut ct0 = lut;
-        let (mut ct1, mut stack) = stack.make_aligned_raw(ct0.as_ref().len(), CACHELINE_ALIGN);
-        let mut ct1 = GlweCiphertextListMutView::from_container(
-            &mut *ct1,
-            ct0.glwe_size(),
+        let mut ct0_list = lut_list;
+        let (mut ct1_list, mut stack) =
+            stack.make_aligned_raw(ct0_list.as_ref().len(), CACHELINE_ALIGN);
+        let mut ct1_list = GlweCiphertextListMutView::from_container(
+            &mut *ct1_list,
+            ct0_list.glwe_size(),
             lut_poly_size,
             ciphertext_modulus,
         );
 
         for (idx, bootstrap_key_ggsw) in self.into_ggsw_iter().enumerate() {
             for (mut ct0, mut ct1, lwe) in izip!(
-                ct0.as_mut_view().into_ciphertexts(),
-                ct1.as_mut_view().into_ciphertexts(),
-                lwe.into_ciphertexts()
+                ct0_list.as_mut_view().into_ciphertexts(),
+                ct1_list.as_mut_view().into_ciphertexts(),
+                lwe_list.into_ciphertexts()
             ) {
                 let lwe = lwe.as_ref();
                 let lwe_mask_element = lwe[idx];
@@ -518,7 +522,8 @@ impl<'a> FourierLweBootstrapKeyView<'a> {
                 DecompositionBaseLog(ciphertext_modulus.get_custom_modulus().ilog2() as usize),
                 DecompositionLevelCount(1),
             );
-            ct0.as_mut()
+            ct0_list
+                .as_mut()
                 .iter_mut()
                 .for_each(|x| *x = signed_decomposer.closest_representable(*x));
         }

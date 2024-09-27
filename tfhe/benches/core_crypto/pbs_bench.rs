@@ -13,27 +13,28 @@ use tfhe::core_crypto::prelude::*;
 use tfhe::keycache::NamedParam;
 use tfhe::shortint::parameters::*;
 
-const SHORTINT_BENCH_PARAMS: [ClassicPBSParameters; 19] = [
-    PARAM_MESSAGE_1_CARRY_0_KS_PBS,
-    PARAM_MESSAGE_1_CARRY_1_KS_PBS,
-    PARAM_MESSAGE_2_CARRY_0_KS_PBS,
-    PARAM_MESSAGE_2_CARRY_1_KS_PBS,
-    PARAM_MESSAGE_2_CARRY_2_KS_PBS,
-    PARAM_MESSAGE_3_CARRY_0_KS_PBS,
-    PARAM_MESSAGE_3_CARRY_2_KS_PBS,
-    PARAM_MESSAGE_3_CARRY_3_KS_PBS,
-    PARAM_MESSAGE_4_CARRY_0_KS_PBS,
-    PARAM_MESSAGE_4_CARRY_3_KS_PBS,
-    PARAM_MESSAGE_4_CARRY_4_KS_PBS,
-    PARAM_MESSAGE_5_CARRY_0_KS_PBS,
-    PARAM_MESSAGE_6_CARRY_0_KS_PBS,
-    PARAM_MESSAGE_7_CARRY_0_KS_PBS,
-    PARAM_MESSAGE_8_CARRY_0_KS_PBS,
-    PARAM_MESSAGE_1_CARRY_1_PBS_KS,
-    PARAM_MESSAGE_2_CARRY_2_PBS_KS,
-    PARAM_MESSAGE_3_CARRY_3_PBS_KS,
-    PARAM_MESSAGE_4_CARRY_4_PBS_KS,
-];
+// const SHORTINT_BENCH_PARAMS: [ClassicPBSParameters; 19] = [
+//     PARAM_MESSAGE_1_CARRY_0_KS_PBS,
+//     PARAM_MESSAGE_1_CARRY_1_KS_PBS,
+//     PARAM_MESSAGE_2_CARRY_0_KS_PBS,
+//     PARAM_MESSAGE_2_CARRY_1_KS_PBS,
+//     PARAM_MESSAGE_2_CARRY_2_KS_PBS,
+//     PARAM_MESSAGE_3_CARRY_0_KS_PBS,
+//     PARAM_MESSAGE_3_CARRY_2_KS_PBS,
+//     PARAM_MESSAGE_3_CARRY_3_KS_PBS,
+//     PARAM_MESSAGE_4_CARRY_0_KS_PBS,
+//     PARAM_MESSAGE_4_CARRY_3_KS_PBS,
+//     PARAM_MESSAGE_4_CARRY_4_KS_PBS,
+//     PARAM_MESSAGE_5_CARRY_0_KS_PBS,
+//     PARAM_MESSAGE_6_CARRY_0_KS_PBS,
+//     PARAM_MESSAGE_7_CARRY_0_KS_PBS,
+//     PARAM_MESSAGE_8_CARRY_0_KS_PBS,
+//     PARAM_MESSAGE_1_CARRY_1_PBS_KS,
+//     PARAM_MESSAGE_2_CARRY_2_PBS_KS,
+//     PARAM_MESSAGE_3_CARRY_3_PBS_KS,
+//     PARAM_MESSAGE_4_CARRY_4_PBS_KS,
+// ];
+const SHORTINT_BENCH_PARAMS: [ClassicPBSParameters; 1] = [PARAM_MESSAGE_2_CARRY_2_KS_PBS];
 
 const BOOLEAN_BENCH_PARAMS: [(&str, BooleanParameters); 2] = [
     ("BOOLEAN_DEFAULT_PARAMS", DEFAULT_PARAMETERS),
@@ -207,23 +208,25 @@ fn mem_optimized_pbs<Scalar: UnsignedTorus + CastInto<usize> + Serialize>(
                 fourier_bsk.polynomial_size(),
                 fft,
             )
-                .unwrap()
-                .unaligned_bytes_required(),
+            .unwrap()
+            .unaligned_bytes_required(),
         );
 
         let id = format!("{bench_name}::{name}");
         {
             bench_group.bench_function(&id, |b| {
                 b.iter(|| {
-                    programmable_bootstrap_lwe_ciphertext_mem_optimized(
-                        &lwe_ciphertext_in,
-                        &mut out_pbs_ct,
-                        &accumulator.as_view(),
-                        &fourier_bsk,
-                        fft,
-                        buffers.stack(),
-                    );
-                    black_box(&mut out_pbs_ct);
+                    for _ in 0..10 {
+                        programmable_bootstrap_lwe_ciphertext_mem_optimized(
+                            &lwe_ciphertext_in,
+                            &mut out_pbs_ct,
+                            &accumulator.as_view(),
+                            &fourier_bsk,
+                            fft,
+                            buffers.stack(),
+                        );
+                        black_box(&mut out_pbs_ct);
+                    }
                 })
             });
         }
@@ -282,7 +285,8 @@ fn mem_optimized_batched_pbs<Scalar: UnsignedTorus + CastInto<usize> + Serialize
             params.pbs_level.unwrap(),
         );
 
-        let count = 4;
+        let count = 4; // FIXME Is it a representative value (big enough?)
+        let count = 10; // FIXME Is it a representative value (big enough?)
 
         // Allocate a new LweCiphertext and encrypt our plaintext
         let mut lwe_ciphertext_in = LweCiphertextListOwned::<Scalar>::new(
@@ -336,11 +340,10 @@ fn mem_optimized_batched_pbs<Scalar: UnsignedTorus + CastInto<usize> + Serialize
         {
             bench_group.bench_function(&id, |b| {
                 b.iter(|| {
-                    // TODO utiliser ici le nouveau point d'entrée batched_programmable_...
                     batched_programmable_bootstrap_lwe_ciphertext_mem_optimized(
-                        out_pbs_ct.as_mut_view(),
-                        lwe_ciphertext_in.as_view(),
-                        accumulator.as_view(),
+                        &lwe_ciphertext_in,
+                        &mut out_pbs_ct,
+                        &accumulator,
                         &fourier_bsk,
                         fft,
                         buffers.stack(),
@@ -1429,8 +1432,8 @@ use cuda::{
 pub fn pbs_group() {
     let mut criterion: Criterion<_> = (Criterion::default()).configure_from_args();
     mem_optimized_pbs(&mut criterion, &benchmark_parameters_64bits());
-    mem_optimized_pbs(&mut criterion, &benchmark_parameters_32bits());
-    mem_optimized_pbs_ntt(&mut criterion);
+    // mem_optimized_pbs(&mut criterion, &benchmark_parameters_32bits());
+    // mem_optimized_pbs_ntt(&mut criterion);
     mem_optimized_batched_pbs(&mut criterion, &benchmark_parameters_64bits());
 }
 

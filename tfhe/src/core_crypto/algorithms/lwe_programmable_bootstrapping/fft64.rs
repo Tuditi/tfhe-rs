@@ -1084,14 +1084,14 @@ pub fn batched_programmable_bootstrap_lwe_ciphertext_mem_optimized<
     AccCont,
     KeyCont,
 >(
-    input: &LweCiphertext<InputCont>,
-    output: &mut LweCiphertext<OutputCont>,
-    accumulator: &GlweCiphertext<AccCont>,
+    input: &LweCiphertextList<InputCont>,
+    output: &mut LweCiphertextList<OutputCont>,
+    accumulator: &GlweCiphertextList<AccCont>,
     fourier_bsk: &FourierLweBootstrapKey<KeyCont>,
     fft: FftView<'_>,
     stack: PodStack<'_>,
 ) where
-// CastInto required for PBS modulus switch which returns a usize
+    // CastInto required for PBS modulus switch which returns a usize
     InputScalar: UnsignedTorus + CastInto<usize>,
     OutputScalar: UnsignedTorus,
     InputCont: Container<Element = InputScalar>,
@@ -1129,6 +1129,6 @@ pub fn batched_programmable_bootstrap_lwe_ciphertext_mem_optimized<
         input.as_view(),
         accumulator.as_view(),
         fft,
-        stack(),
+        stack,
     );
 }
