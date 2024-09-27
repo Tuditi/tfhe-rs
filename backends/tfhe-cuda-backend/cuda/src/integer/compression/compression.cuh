@@ -45,6 +45,8 @@ template <typename Torus>
 __host__ void host_pack(cudaStream_t stream, uint32_t gpu_index,
                         Torus *array_out, Torus *array_in, uint32_t num_glwes,
                         int_compression<Torus> *mem_ptr) {
+  if (array_in == array_out)
+    PANIC("Cuda error: Input and output must be different");
   cudaSetDevice(gpu_index);
   auto compression_params = mem_ptr->compression_params;
 
@@ -63,6 +65,7 @@ __host__ void host_pack(cudaStream_t stream, uint32_t gpu_index,
   dim3 threads(num_threads);
   pack<Torus><<<grid, threads, 0, stream>>>(array_out, array_in, log_modulus,
                                             num_glwes, in_len, out_len);
+  check_cuda_error(cudaGetLastError());
 }
 
 template <typename Torus>
@@ -118,7 +121,6 @@ __host__ void host_integer_compress(cudaStream_t *streams,
       num_glwes * (compression_params.glwe_dimension + 1) *
           compression_params.polynomial_size,
       mem_ptr->storage_log_modulus);
-  check_cuda_error(cudaGetLastError());
 
   host_pack<Torus>(streams[0], gpu_indexes[0], glwe_array_out,
                    tmp_glwe_array_out, num_glwes, mem_ptr);
@@ -160,11 +162,15 @@ __global__ void extract(Torus *glwe_array_out, Torus *array_in, uint32_t index,
   }
 }
 
+/// Extracts the glwe_index-nth GLWE ciphertext
 template <typename Torus>
 __host__ void host_extract(cudaStream_t stream, uint32_t gpu_index,
                            Torus *glwe_array_out, Torus *array_in,
                            uint32_t glwe_index,
                            int_decompression<Torus> *mem_ptr) {
+  if (array_in == glwe_array_out)
+    PANIC("Cuda error: Input and output must be different");
+
   cudaSetDevice(gpu_index);
 
   auto compression_params = mem_ptr->compression_params;
@@ -282,7 +288,6 @@ host_integer_decompress(cudaStream_t *streams, uint32_t *gpu_indexes,
   auto lut = h_mem_ptr->carry_extract_lut;
   auto active_gpu_count = get_active_gpu_count(num_lwes, gpu_count);
   if (active_gpu_count == 1) {
-
     execute_pbs_async<Torus>(
         streams, gpu_indexes, active_gpu_count, d_lwe_array_out,
         lut->lwe_indexes_out, lut->lut_vec, lut->lut_indexes_vec, extracted_lwe,
