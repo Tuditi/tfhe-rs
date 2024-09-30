@@ -145,8 +145,10 @@ impl<Scalar: UnsignedTorus> CompressedModulusSwitchedGlweCiphertext<Scalar> {
             .map(|a| modulus_switch(*a, log_modulus))
             .collect();
 
+                println!("cpu modulus_switched: {:?}", modulus_switched);
         let packed_integers = PackedIntegers::pack(&modulus_switched, log_modulus);
 
+                println!("cpu packed_integers: {:?}", packed_integers.packed_coeffs);
         Self {
             packed_integers,
             glwe_dimension,

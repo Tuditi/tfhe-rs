@@ -101,6 +101,7 @@ __host__ void host_integer_compress(cudaStream_t *streams,
 
   auto lwe_subset = lwe_shifted;
   auto glwe_out = tmp_glwe_array_out;
+  int i = 0;
   while (rem_lwes > 0) {
     auto chunk_size = min(rem_lwes, mem_ptr->lwe_per_glwe);
 
@@ -109,6 +110,10 @@ __host__ void host_integer_compress(cudaStream_t *streams,
         fp_ks_buffer, input_lwe_dimension, compression_params.glwe_dimension,
         compression_params.polynomial_size, compression_params.ks_base_log,
         compression_params.ks_level, chunk_size);
+
+    printf("%d) ", i);
+      print_debug("cuda packing_ks", glwe_out, (compression_params.glwe_dimension + 1) *
+                        compression_params.polynomial_size);
 
     rem_lwes -= chunk_size;
     lwe_subset += chunk_size * lwe_in_size;
@@ -121,9 +126,21 @@ __host__ void host_integer_compress(cudaStream_t *streams,
       num_glwes * (compression_params.glwe_dimension + 1) *
           compression_params.polynomial_size,
       mem_ptr->storage_log_modulus);
+      print_debug("cuda ms", tmp_glwe_array_out, num_glwes *  (compression_params.glwe_dimension
+      + 1) * compression_params.polynomial_size);
 
   host_pack<Torus>(streams[0], gpu_indexes[0], glwe_array_out,
                    tmp_glwe_array_out, num_glwes, mem_ptr);
+
+  auto in_len = (compression_params.glwe_dimension + 1) *
+                compression_params.polynomial_size;
+
+  auto log_modulus = mem_ptr->storage_log_modulus;
+  auto number_bits_to_pack = in_len * log_modulus;
+  auto nbits = sizeof(Torus) * 8;
+  // number_bits_to_pack.div_ceil(Scalar::BITS)
+  auto out_len = (number_bits_to_pack + nbits - 1) / nbits;
+      print_debug("cuda pack", glwe_array_out, num_glwes *  out_len);
 }
 
 template <typename Torus>

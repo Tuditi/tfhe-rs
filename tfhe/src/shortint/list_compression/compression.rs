@@ -52,8 +52,8 @@ impl CompressionKey {
         );
 
         let glwe_ct_list: Vec<_> = ciphertexts
-            .par_chunks(lwe_per_glwe.0)
-            .map(|ct_list| {
+            .chunks(lwe_per_glwe.0).enumerate()
+            .map(|(i,ct_list)| {
                 let mut list: Vec<_> = vec![];
 
                 for ct in ct_list {
@@ -95,6 +95,8 @@ impl CompressionKey {
                 par_keyswitch_lwe_ciphertext_list_and_pack_in_glwe_ciphertext(
                     lwe_pksk, &list, &mut out,
                 );
+
+                println!("{i}) cpu packing_ks: {:?}", lwe_pksk);
 
                 CompressedModulusSwitchedGlweCiphertext::compress(
                     &out,
