@@ -239,6 +239,24 @@ impl<C: Container<Element = c64>> FourierGgswLevelMatrix<C> {
         }
     }
 
+    // pub fn into_rows<'a>(
+    //     &'a self,
+    // ) -> impl DoubleEndedIterator<Item = FourierGgswLevelRow<&'a [c64]>>
+    // where
+    //     C: Split + 'a,
+    // {
+    //     let row_count = self.row_count();
+    //     assert_eq!(row_count, 2);
+    //     let row = self.data.as_ref().split_into(row_count).next().unwrap();
+    //     [row, row]
+    //         .into_iter()
+    //         .map(move |slice| FourierGgswLevelRow {
+    //             data: slice,
+    //             polynomial_size: self.polynomial_size,
+    //             glwe_size: self.glwe_size,
+    //             decomposition_level: self.decomposition_level,
+    //         })
+    // }
     /// Return an iterator over the rows of the level matrices.
     pub fn into_rows(self) -> impl DoubleEndedIterator<Item = FourierGgswLevelRow<C>>
     where
