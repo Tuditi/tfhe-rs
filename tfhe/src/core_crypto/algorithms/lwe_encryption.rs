@@ -16,7 +16,7 @@ use crate::core_crypto::commons::traits::*;
 use crate::core_crypto::entities::*;
 use rayon::prelude::*;
 #[cfg(feature = "zk-pok")]
-use tfhe_zk_pok::proofs::pke::{commit, prove};
+use tfhe_zk_pok::proofs::pke_v2::{commit, prove};
 
 /// Convenience function to share the core logic of the LWE encryption between all functions needing
 /// it.

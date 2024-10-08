@@ -1,7 +1,7 @@
 use crate::core_crypto::entities::{LweCompactCiphertextList, LweCompactPublicKey};
 use crate::core_crypto::prelude::{CastFrom, Container, LweCiphertext, UnsignedInteger};
 use crate::zk::{CompactPkeProof, CompactPkePublicParams, ZkVerificationOutCome};
-use tfhe_zk_pok::proofs::pke::{verify, PublicCommit};
+use tfhe_zk_pok::proofs::pke_v2::{verify, PublicCommit};
 
 /// Verifies with the given proof that a [`LweCompactCiphertextList`]
 /// is valid.

@@ -5,18 +5,18 @@ use rand_core::RngCore;
 use std::cmp::Ordering;
 use std::collections::Bound;
 use std::fmt::Debug;
-use tfhe_zk_pok::proofs::pke::crs_gen;
+use tfhe_zk_pok::proofs::pke_v2::crs_gen;
 
 pub use tfhe_zk_pok::curve_api::Compressible;
 pub use tfhe_zk_pok::proofs::ComputeLoad as ZkComputeLoad;
 type Curve = tfhe_zk_pok::curve_api::Bls12_446;
-pub type CompactPkeProof = tfhe_zk_pok::proofs::pke::Proof<Curve>;
+pub type CompactPkeProof = tfhe_zk_pok::proofs::pke_v2::Proof<Curve>;
 
 impl Named for CompactPkeProof {
     const NAME: &'static str = "zk::CompactPkeProof";
 }
 
-pub type CompactPkePublicParams = tfhe_zk_pok::proofs::pke::PublicParams<Curve>;
+pub type CompactPkePublicParams = tfhe_zk_pok::proofs::pke_v2::PublicParams<Curve>;
 pub type SerializableCompactPkePublicParams =
     tfhe_zk_pok::serialization::SerializablePKEv1PublicParams;
 
@@ -61,7 +61,7 @@ pub struct ZkMSBZeroPaddingBitCount(pub u64);
 impl CompactPkeCrs {
     /// Prepare and check the CRS parameters.
     ///
-    /// The output of this function can be used in [tfhe_zk_pok::proofs::pke::compute_crs_params].
+    /// The output of this function can be used in [tfhe_zk_pok::proofs::pke_v2::compute_crs_params].
     pub fn prepare_crs_parameters<Scalar, NoiseDistribution>(
         lwe_dim: LweDimension,
         max_num_cleartext: usize,
