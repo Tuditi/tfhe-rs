@@ -447,7 +447,7 @@ pub enum Bound {
 pub fn compute_crs_params(
     d: usize,
     k: usize,
-    B: u64,
+    B_bar: u64,
     _q: u64, // we keep q here to make sure the API is consistent with [crs_gen]
     t: u64,
     msbs_zero_padding_bit_count: u64,
@@ -455,14 +455,14 @@ pub fn compute_crs_params(
 ) -> (usize, usize, u64, u64, usize) {
     let B_r = d as u64 / 2 + 1;
     let B_bound = {
-        let B = B as f64;
+        let B_bar = B_bar as f64;
         let d = d as f64;
         let k = k as f64;
 
         (match bound {
             Bound::GHL => 9.75,
             Bound::CS => f64::sqrt(2.0 * (d + k) + 4.0),
-        }) * f64::sqrt(sqr(B) + (sqr(d + 2.0) * (d + k)) / 4.0)
+        }) * f64::sqrt(sqr(B_bar) + (sqr(d + 2.0) * (d + k)) / 4.0)
     }
     .ceil() as u64;
 
@@ -522,23 +522,23 @@ pub fn crs_gen_ghl<G: Curve>(
 pub fn crs_gen_cs<G: Curve>(
     d: usize,
     k: usize,
-    B: u64,
+    B_bar_infinity: u64,
     q: u64,
     t: u64,
     msbs_zero_padding_bit_count: u64,
     rng: &mut dyn RngCore,
 ) -> PublicParams<G> {
     let alpha = G::Zp::rand(rng);
-    let B = B * (isqrt((d + k) as _) as u64 + 1);
+    let B_bar = B_bar_infinity * (isqrt((d + k) as _) as u64 + 1);
     let (n, D, B_r, B_bound, m_bound) =
-        compute_crs_params(d, k, B, q, t, msbs_zero_padding_bit_count, Bound::CS);
+        compute_crs_params(d, k, B_bar, q, t, msbs_zero_padding_bit_count, Bound::CS);
     PublicParams {
         g_lists: GroupElements::<G>::new(n, alpha),
         D,
         n,
         d,
         k,
-        B,
+        B: B_bar,
         B_r,
         B_bound,
         m_bound,
