@@ -31,9 +31,9 @@ use std::fmt::{Debug, Display};
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, Versionize)]
 #[versionize(ClientKeyVersions)]
 pub struct ClientKey {
-    pub(crate) glwe_secret_key: GlweSecretKeyOwned<u64>,
+    pub glwe_secret_key: GlweSecretKeyOwned<u64>,
     /// Key used as the output of the keyswitch operation
-    pub(crate) lwe_secret_key: LweSecretKeyOwned<u64>,
+    pub lwe_secret_key: LweSecretKeyOwned<u64>,
     pub parameters: ShortintParameterSet,
 }
 
@@ -519,7 +519,7 @@ impl ClientKey {
         self.decrypt_message_and_carry(ct) % ct.message_modulus.0 as u64
     }
 
-    pub(crate) fn decrypt_no_decode(&self, ct: &Ciphertext) -> u64 {
+    pub fn decrypt_no_decode(&self, ct: &Ciphertext) -> u64 {
         let lwe_decryption_key = match ct.pbs_order {
             PBSOrder::KeyswitchBootstrap => self.large_lwe_secret_key(),
             PBSOrder::BootstrapKeyswitch => self.small_lwe_secret_key(),

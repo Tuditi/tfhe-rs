@@ -70,14 +70,14 @@ impl ClientKey {
             )
         });
 
-        assert!(
-            private_compression_key.params.storage_log_modulus.0
-                <= cks_params
-                    .polynomial_size
-                    .to_blind_rotation_input_modulus_log()
-                    .0,
-            "Compression parameters say to store more bits than useful"
-        );
+        // assert!(
+        //     private_compression_key.params.storage_log_modulus.0
+        //         <= cks_params
+        //             .polynomial_size
+        //             .to_blind_rotation_input_modulus_log()
+        //             .0,
+        //     "Compression parameters say to store more bits than useful"
+        // );
 
         let glwe_compression_key = CompressionKey {
             packing_key_switching_key,

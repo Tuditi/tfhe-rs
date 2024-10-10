@@ -98,7 +98,7 @@ impl CompressedCiphertextListBuilder {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize, Versionize)]
 #[versionize(CompressedCiphertextListVersions)]
 pub struct CompressedCiphertextList {
-    pub(crate) packed_list: ShortintCompressedCiphertextList,
+    pub packed_list: ShortintCompressedCiphertextList,
     pub(crate) info: Vec<DataKind>,
 }
 
@@ -131,6 +131,31 @@ impl CompressedCiphertextList {
             (start_block_index..end_block_index)
                 .into_par_iter()
                 .map(|i| decomp_key.key.unpack(&self.packed_list, i).unwrap())
+                .collect(),
+            current_info,
+        ))
+    }
+
+    pub fn extract_mod_switched(
+        &self,
+        index: usize,
+        decomp_key: &DecompressionKey,
+    ) -> Option<(Vec<Ciphertext>, DataKind)> {
+        let preceding_infos = self.info.get(..index)?;
+        let current_info = self.info.get(index).copied()?;
+
+        let start_block_index: usize = preceding_infos
+            .iter()
+            .copied()
+            .map(DataKind::num_blocks)
+            .sum();
+
+        let end_block_index = start_block_index + current_info.num_blocks();
+
+        Some((
+            (start_block_index..end_block_index)
+                .into_iter()
+                .map(|i| decomp_key.key.unpack_no_br(&self.packed_list, i).unwrap())
                 .collect(),
             current_info,
         ))

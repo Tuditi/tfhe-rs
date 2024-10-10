@@ -5,9 +5,9 @@ use crate::core_crypto::prelude::{
     par_keyswitch_lwe_ciphertext_list_and_pack_in_glwe_ciphertext, CiphertextCount, GlweCiphertext,
     LweCiphertext, LweCiphertextCount, LweCiphertextList, MonomialDegree,
 };
-use crate::shortint::ciphertext::CompressedCiphertextList;
+use crate::shortint::ciphertext::{CompressedCiphertextList, Degree};
 use crate::shortint::engine::ShortintEngine;
-use crate::shortint::parameters::NoiseLevel;
+use crate::shortint::parameters::{CarryModulus, NoiseLevel};
 use crate::shortint::server_key::{
     apply_programmable_bootstrap, generate_lookup_table, unchecked_scalar_mul_assign,
 };
@@ -125,6 +125,49 @@ impl CompressionKey {
 }
 
 impl DecompressionKey {
+    pub fn unpack_no_br(
+        &self,
+        packed: &CompressedCiphertextList,
+        index: usize,
+    ) -> Option<Ciphertext> {
+        if index >= packed.count.0 {
+            return None;
+        }
+
+        let polynomial_size = packed.modulus_switched_glwe_ciphertext_list[0].polynomial_size();
+        let ciphertext_modulus = packed.ciphertext_modulus;
+        let glwe_dimension = packed.modulus_switched_glwe_ciphertext_list[0].glwe_dimension();
+
+        let lwe_per_glwe = packed.lwe_per_glwe.0;
+
+        let lwe_size = glwe_dimension
+            .to_equivalent_lwe_dimension(polynomial_size)
+            .to_lwe_size();
+
+        let glwe_index = index / lwe_per_glwe;
+
+        let packed_glwe = packed.modulus_switched_glwe_ciphertext_list[glwe_index].extract();
+
+        let monomial_degree = MonomialDegree(index % lwe_per_glwe);
+
+        let mut intermediate_lwe = LweCiphertext::new(0, lwe_size, ciphertext_modulus);
+
+        extract_lwe_sample_from_glwe_ciphertext(
+            &packed_glwe,
+            &mut intermediate_lwe,
+            monomial_degree,
+        );
+
+        Some(Ciphertext::new(
+            intermediate_lwe,
+            Degree::new(packed.message_modulus.0 - 1),
+            NoiseLevel::UNKNOWN,
+            packed.message_modulus,
+            CarryModulus(1),
+            packed.pbs_order,
+        ))
+    }
+
     pub fn unpack(&self, packed: &CompressedCiphertextList, index: usize) -> Option<Ciphertext> {
         if index >= packed.count.0 {
             return None;
@@ -138,6 +181,11 @@ impl DecompressionKey {
             packed.carry_modulus,
             |x| x / packed.message_modulus.0 as u64,
         );
+
+        // 0 | 00 | mm
+        // * 4
+        // 0 | mm | xx -> compressed with mod switch
+        // 0 | 00 | mm
 
         let polynomial_size = packed.modulus_switched_glwe_ciphertext_list[0].polynomial_size();
         let ciphertext_modulus = packed.ciphertext_modulus;
