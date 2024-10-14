@@ -1299,10 +1299,6 @@ use cuda::{
     cuda_multi_bit_pbs_group, cuda_multi_bit_pbs_throughput_group, cuda_pbs_group,
     cuda_pbs_throughput_group,
 };
-use tfhe::shortint::parameters::multi_bit::gaussian::p_fail_2_minus_64::ks_pbs_gpu::{
-    PARAM_GPU_MULTI_BIT_GROUP_3_MESSAGE_1_CARRY_1_KS_PBS_GAUSSIAN_2M64,
-    PARAM_GPU_MULTI_BIT_GROUP_3_MESSAGE_3_CARRY_3_KS_PBS_GAUSSIAN_2M64,
-};
 
 pub fn pbs_group() {
     let mut criterion: Criterion<_> = (Criterion::default()).configure_from_args();

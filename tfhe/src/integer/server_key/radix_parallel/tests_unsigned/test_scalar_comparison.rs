@@ -247,7 +247,7 @@ macro_rules! define_scalar_comparison_test_functions {
 
                 PARAM_MESSAGE_1_CARRY_1_KS_PBS_GAUSSIAN_2M64,
 
-                PARAM_MESSAGE_2_CARRY_2_KS_PBS,
+                PARAM_MESSAGE_2_CARRY_2_KS_PBS_TUNIFORM_2M64,
 
                 PARAM_MESSAGE_3_CARRY_3_KS_PBS_GAUSSIAN_2M64,
 
@@ -260,7 +260,7 @@ macro_rules! define_scalar_comparison_test_functions {
             {
 
                 PARAM_MESSAGE_1_CARRY_1_KS_PBS_GAUSSIAN_2M64,
-                PARAM_MESSAGE_2_CARRY_2_KS_PBS,
+                PARAM_MESSAGE_2_CARRY_2_KS_PBS_TUNIFORM_2M64,
                 // We don't use PARAM_MESSAGE_3_CARRY_3_KS_PBS,
                 // as smart test might overflow values
                 // and when using 3_3 to represent 256 we actually have more than 256 bits
@@ -275,7 +275,7 @@ macro_rules! define_scalar_comparison_test_functions {
             {
 
                 PARAM_MESSAGE_1_CARRY_1_KS_PBS_GAUSSIAN_2M64,
-                PARAM_MESSAGE_2_CARRY_2_KS_PBS,
+                PARAM_MESSAGE_2_CARRY_2_KS_PBS_TUNIFORM_2M64,
                 // We don't use PARAM_MESSAGE_3_CARRY_3_KS_PBS,
                 // as default test might overflow values
                 // and when using 3_3 to represent 256 we actually have more than 256 bits

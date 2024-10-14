@@ -1,6 +1,6 @@
 use crate::core_crypto::prelude::*;
 use crate::shortint::ciphertext::MaxNoiseLevel;
-use crate::shortint::parameters::multi_bit::gaussian::MultiBitPBSParameters;
+use crate::shortint::parameters::multi_bit::MultiBitPBSParameters;
 use crate::shortint::parameters::{CarryModulus, MessageModulus};
 // Group 2
 

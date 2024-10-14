@@ -82,15 +82,8 @@ fn client_server_keys() {
             ClassicPBSParameters,
             ClassicPBSParameters,
             ShortintKeySwitchingParameters,
-        ); 3] = [
+        ); 2] = [
             (
-                // Tuniform
-                PARAM_MESSAGE_1_CARRY_1_KS_PBS_GAUSSIAN_2M64,
-                PARAM_MESSAGE_2_CARRY_2_KS_PBS_TUNIFORM_2M64,
-                PARAM_KEYSWITCH_1_1_KS_PBS_TO_2_2_KS_PBS,
-            ),
-            (
-                // Gaussian
                 PARAM_MESSAGE_1_CARRY_1_KS_PBS_GAUSSIAN_2M64,
                 PARAM_MESSAGE_2_CARRY_2_KS_PBS_GAUSSIAN_2M64,
                 PARAM_KEYSWITCH_1_1_KS_PBS_TO_2_2_KS_PBS,
@@ -106,16 +99,10 @@ fn client_server_keys() {
 
         #[cfg(feature = "experimental")]
         {
-            const WOPBS_PARAMS: [(ClassicPBSParameters, WopbsParameters); 2] = [
-                (
-                    PARAM_MESSAGE_2_CARRY_2_KS_PBS_TUNIFORM_2M64,
-                    WOPBS_PARAM_MESSAGE_2_CARRY_2_KS_PBS,
-                ),
-                (
-                    PARAM_MESSAGE_2_CARRY_2_KS_PBS_GAUSSIAN_2M64,
-                    WOPBS_PARAM_MESSAGE_2_CARRY_2_KS_PBS,
-                ),
-            ];
+            const WOPBS_PARAMS: [(ClassicPBSParameters, WopbsParameters); 1] = [(
+                PARAM_MESSAGE_2_CARRY_2_KS_PBS_GAUSSIAN_2M64,
+                WOPBS_PARAM_MESSAGE_2_CARRY_2_KS_PBS,
+            )];
             generate_wopbs_keys(&WOPBS_PARAMS);
         }
 
@@ -151,7 +138,7 @@ fn client_server_keys() {
                     WOPBS_PARAM_MESSAGE_1_CARRY_1_KS_PBS,
                 ),
                 (
-                    PARAM_MESSAGE_2_CARRY_2_KS_PBS_TUNIFORM_2M64,
+                    PARAM_MESSAGE_2_CARRY_2_KS_PBS_GAUSSIAN_2M64,
                     WOPBS_PARAM_MESSAGE_2_CARRY_2_KS_PBS,
                 ),
                 (

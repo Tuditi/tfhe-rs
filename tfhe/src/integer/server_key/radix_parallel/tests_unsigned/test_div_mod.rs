@@ -20,7 +20,7 @@ create_parametrized_test!(
         no_coverage => {
             // Due to the use of comparison,
             // this algorithm requires 3 bits
-            PARAM_MESSAGE_2_CARRY_2_KS_PBS,
+            PARAM_MESSAGE_2_CARRY_2_KS_PBS_TUNIFORM_2M64,
             PARAM_MESSAGE_3_CARRY_3_KS_PBS_GAUSSIAN_2M64,
             PARAM_MESSAGE_4_CARRY_4_KS_PBS_GAUSSIAN_2M64,
             PARAM_MULTI_BIT_GROUP_2_MESSAGE_2_CARRY_2_KS_PBS_GAUSSIAN_2M64,
@@ -39,7 +39,7 @@ create_parametrized_test!(
         no_coverage => {
             // Due to the use of comparison,
             // this algorithm requires 3 bits
-            PARAM_MESSAGE_2_CARRY_2_KS_PBS,
+            PARAM_MESSAGE_2_CARRY_2_KS_PBS_TUNIFORM_2M64,
             PARAM_MESSAGE_3_CARRY_3_KS_PBS_GAUSSIAN_2M64,
             PARAM_MESSAGE_4_CARRY_4_KS_PBS_GAUSSIAN_2M64,
             PARAM_MULTI_BIT_GROUP_2_MESSAGE_2_CARRY_2_KS_PBS_GAUSSIAN_2M64,
@@ -58,7 +58,7 @@ create_parametrized_test!(
         no_coverage => {
             // Due to the use of comparison,
             // this algorithm requires 3 bits
-            PARAM_MESSAGE_2_CARRY_2_KS_PBS,
+            PARAM_MESSAGE_2_CARRY_2_KS_PBS_TUNIFORM_2M64,
             PARAM_MESSAGE_3_CARRY_3_KS_PBS_GAUSSIAN_2M64,
             PARAM_MESSAGE_4_CARRY_4_KS_PBS_GAUSSIAN_2M64,
             PARAM_MULTI_BIT_GROUP_2_MESSAGE_2_CARRY_2_KS_PBS_GAUSSIAN_2M64,
@@ -77,7 +77,7 @@ create_parametrized_test!(
         no_coverage => {
             // Due to the use of comparison,
             // this algorithm requires 3 bits
-            PARAM_MESSAGE_2_CARRY_2_KS_PBS,
+            PARAM_MESSAGE_2_CARRY_2_KS_PBS_TUNIFORM_2M64,
             PARAM_MESSAGE_3_CARRY_3_KS_PBS_GAUSSIAN_2M64,
             PARAM_MESSAGE_4_CARRY_4_KS_PBS_GAUSSIAN_2M64,
             PARAM_MULTI_BIT_GROUP_2_MESSAGE_2_CARRY_2_KS_PBS_GAUSSIAN_2M64,
@@ -96,7 +96,7 @@ create_parametrized_test!(
         no_coverage => {
             // Due to the use of comparison,
             // this algorithm requires 3 bits
-            PARAM_MESSAGE_2_CARRY_2_KS_PBS,
+            PARAM_MESSAGE_2_CARRY_2_KS_PBS_TUNIFORM_2M64,
             PARAM_MESSAGE_3_CARRY_3_KS_PBS_GAUSSIAN_2M64,
             PARAM_MESSAGE_4_CARRY_4_KS_PBS_GAUSSIAN_2M64,
             PARAM_MULTI_BIT_GROUP_2_MESSAGE_2_CARRY_2_KS_PBS_GAUSSIAN_2M64,
@@ -115,7 +115,7 @@ create_parametrized_test!(
         no_coverage => {
             // Due to the use of comparison,
             // this algorithm requires 3 bits
-            PARAM_MESSAGE_2_CARRY_2_KS_PBS,
+            PARAM_MESSAGE_2_CARRY_2_KS_PBS_TUNIFORM_2M64,
             PARAM_MESSAGE_3_CARRY_3_KS_PBS_GAUSSIAN_2M64,
             PARAM_MESSAGE_4_CARRY_4_KS_PBS_GAUSSIAN_2M64,
             PARAM_MULTI_BIT_GROUP_2_MESSAGE_2_CARRY_2_KS_PBS_GAUSSIAN_2M64,

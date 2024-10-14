@@ -29,7 +29,7 @@ create_parametrized_test!(integer_advanced_overflowing_add_assign_with_carry_at_
         COVERAGE_PARAM_MULTI_BIT_MESSAGE_2_CARRY_2_GROUP_2_KS_PBS
     },
     no_coverage => {
-        PARAM_MESSAGE_2_CARRY_2_KS_PBS,
+        PARAM_MESSAGE_2_CARRY_2_KS_PBS_TUNIFORM_2M64,
         PARAM_MESSAGE_3_CARRY_3_KS_PBS_GAUSSIAN_2M64,
         PARAM_MESSAGE_4_CARRY_4_KS_PBS_GAUSSIAN_2M64,
         PARAM_MULTI_BIT_GROUP_2_MESSAGE_2_CARRY_2_KS_PBS_GAUSSIAN_2M64,
@@ -45,7 +45,7 @@ create_parametrized_test!(integer_extensive_trivial_overflowing_advanced_add_ass
         COVERAGE_PARAM_MULTI_BIT_MESSAGE_2_CARRY_2_GROUP_2_KS_PBS
     },
     no_coverage => {
-        PARAM_MESSAGE_2_CARRY_2_KS_PBS,
+        PARAM_MESSAGE_2_CARRY_2_KS_PBS_TUNIFORM_2M64,
         PARAM_MESSAGE_3_CARRY_3_KS_PBS_GAUSSIAN_2M64,
         PARAM_MESSAGE_4_CARRY_4_KS_PBS_GAUSSIAN_2M64,
         PARAM_MULTI_BIT_GROUP_2_MESSAGE_2_CARRY_2_KS_PBS_GAUSSIAN_2M64,
