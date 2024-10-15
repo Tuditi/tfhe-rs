@@ -915,7 +915,7 @@ run_web_js_api_parallel: build_web_js_api_parallel setup_venv
 	--browser-kind  $(browser_kind) \
 	--server-cmd "npm run server" \
 	--server-workdir "$(WEB_SERVER_DIR)" \
-	--id-pattern $(filter)
+	--id-pattern "compactPublicKeyZeroKnowledgeBench"
 
 test_web_js_api_parallel_chrome: browser_path = "$(WEB_RUNNER_DIR)/chrome/chrome-linux64/chrome"
 test_web_js_api_parallel_chrome: driver_path = "$(WEB_RUNNER_DIR)/chrome/chromedriver-linux64/chromedriver"

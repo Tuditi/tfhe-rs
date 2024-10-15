@@ -474,6 +474,8 @@ pub fn compute_crs_params(
     let D = d + k * effective_t_for_decomposition.ilog2() as usize;
     let n = D + 128 * m_bound;
 
+    panic!("{n}");
+
     (n, D, B_r, B_bound, m_bound)
 }
 

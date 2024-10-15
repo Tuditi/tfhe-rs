@@ -61,7 +61,8 @@ pub struct ZkMSBZeroPaddingBitCount(pub u64);
 impl CompactPkeCrs {
     /// Prepare and check the CRS parameters.
     ///
-    /// The output of this function can be used in [tfhe_zk_pok::proofs::pke_v2::compute_crs_params].
+    /// The output of this function can be used in
+    /// [tfhe_zk_pok::proofs::pke_v2::compute_crs_params].
     pub fn prepare_crs_parameters<Scalar, NoiseDistribution>(
         lwe_dim: LweDimension,
         max_num_cleartext: usize,
@@ -81,7 +82,7 @@ impl CompactPkeCrs {
             Bound::Included(high_b) => {
                 let high_b = high_b.wrapping_abs().into_unsigned();
                 if high_b.is_power_of_two() {
-                    high_b * Scalar::TWO
+                    high_b
                 } else {
                     high_b.next_power_of_two()
                 }
@@ -103,7 +104,7 @@ impl CompactPkeCrs {
             Bound::Included(low_b) => {
                 let low_b = low_b.wrapping_abs().into_unsigned();
                 if low_b.is_power_of_two() {
-                    low_b * Scalar::TWO
+                    low_b
                 } else {
                     low_b.next_power_of_two()
                 }
@@ -178,6 +179,10 @@ impl CompactPkeCrs {
             ciphertext_modulus,
             plaintext_modulus,
         )?;
+        panic!(
+            "(d, k, b, q, t, msbs_zero_padding_bit_count)={:?}",
+            (d, k, b, q, t, msbs_zero_padding_bit_count.0)
+        );
         let public_params = crs_gen(
             d.0,
             k,
