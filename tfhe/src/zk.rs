@@ -179,10 +179,10 @@ impl CompactPkeCrs {
             ciphertext_modulus,
             plaintext_modulus,
         )?;
-        panic!(
-            "(d, k, b, q, t, msbs_zero_padding_bit_count)={:?}",
-            (d, k, b, q, t, msbs_zero_padding_bit_count.0)
-        );
+        // panic!(
+        //     "(d, k, b, q, t, msbs_zero_padding_bit_count)={:?}",
+        //     (d, k, b, q, t, msbs_zero_padding_bit_count.0)
+        // );
         let public_params = crs_gen(
             d.0,
             k,
