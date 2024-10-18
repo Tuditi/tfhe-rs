@@ -1,0 +1,8 @@
+name: Keep Belfort repo in sync with fork
+
+on:
+  push:
+    # Pattern matched against refs/tags
+    tags:
+      - "tfhe-rs-*"
+  workflow-dispatch:
